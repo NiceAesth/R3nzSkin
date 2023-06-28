@@ -194,7 +194,6 @@ bool InputText(
   void *userData                  = nullptr
 ) noexcept;
 void textUnformattedCentered(const char *text) noexcept;
-void rainbowText() noexcept;
 void hotkey(const char *label, KeyBind &key, float samelineOffset = 0.0f, const ImVec2 &size = {100.0f, 0.0f}) noexcept;
 void hoverInfo(const char *desc) noexcept;
 };  // namespace ImGui

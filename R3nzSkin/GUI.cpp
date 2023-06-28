@@ -89,7 +89,6 @@ void GUI::render() noexcept {
       ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysAutoResize
   );
   {
-    ImGui::rainbowText();
     if (ImGui::BeginTabBar(
           "TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip
         )) {
@@ -256,7 +255,6 @@ void GUI::render() noexcept {
         ImGui::Checkbox(
           cheatManager.config->heroName ? "HeroName based" : "PlayerName based", &cheatManager.config->heroName
         );
-        ImGui::Checkbox("Rainbow Text", &cheatManager.config->rainbowText);
         ImGui::Checkbox("Quick Skin Change", &cheatManager.config->quickSkinChange);
         ImGui::hoverInfo(
           "It allows you to change skin without opening the "
