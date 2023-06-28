@@ -35,7 +35,7 @@ jobs:
       with:
         type: 'zip'
         directory: 'Release/${{matrix.BUILD_CONFIGURATION}}'
-        filename: 'R3nzSkin-${{matrix.BUILD_CONFIGURATION}}.zip'
+        filename: '../../R3nzSkin-${{matrix.BUILD_CONFIGURATION}}.zip'
         
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
