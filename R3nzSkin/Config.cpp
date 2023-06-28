@@ -38,7 +38,7 @@ void Config::save() noexcept {
   config_json["menuKey"]                   = this->menuKey.toString();
   config_json["nextSkinKey"]               = this->nextSkinKey.toString();
   config_json["previousSkinKey"]           = this->previousSkinKey.toString();
-  config_json["heroName"]                  = this->heroName;
+  config_json["usePlayerNames"]            = this->usePlayerNames;
   config_json["quickSkinChange"]           = this->quickSkinChange;
   config_json["fontScale"]                 = this->fontScale;
   config_json["current_combo_ward_index"]  = this->current_combo_ward_index;
@@ -84,7 +84,7 @@ void Config::load() noexcept {
   this->menuKey                   = KeyBind(config_json.value("menuKey", "INSERT").c_str());
   this->nextSkinKey               = KeyBind(config_json.value("nextSkinKey", "PAGE_UP").c_str());
   this->previousSkinKey           = KeyBind(config_json.value("previousSkinKey", "PAGE_DOWN").c_str());
-  this->heroName                  = config_json.value("heroName", true);
+  this->usePlayerNames            = config_json.value("usePlayerNames", true);
   this->quickSkinChange           = config_json.value("quickSkinChange", false);
   this->fontScale                 = config_json.value("fontScale", 1.0f);
   this->current_combo_ward_index  = config_json.value("current_combo_ward_index", 0);
@@ -119,7 +119,7 @@ void Config::reset() noexcept {
   this->menuKey                          = KeyBind(KeyBind::INSERT);
   this->nextSkinKey                      = KeyBind(KeyBind::PAGE_UP);
   this->previousSkinKey                  = KeyBind(KeyBind::PAGE_DOWN);
-  this->heroName                         = true;
+  this->usePlayerNames                   = true;
   this->quickSkinChange                  = false;
   this->fontScale                        = 1.0f;
   this->current_combo_skin_index         = 0;

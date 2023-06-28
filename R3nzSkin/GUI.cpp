@@ -96,7 +96,7 @@ void GUI::render() noexcept {
         if (ImGui::BeginTabItem("Local Player")) {
           auto &values{cheatManager.database
                          ->champions_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
-          ImGui::Text("Player Skins Settings:");
+          ImGui::Text("Player Skin Settings:");
 
           if (ImGui::Combo(
                 "Current Skin", &cheatManager.config->current_combo_skin_index, vector_getter_skin,
@@ -146,7 +146,7 @@ void GUI::render() noexcept {
       }
 
       if (ImGui::BeginTabItem("Other Champs")) {
-        ImGui::Text("Other Champs Skins Settings:");
+        ImGui::Text("Other Champion Skin Settings:");
         std::int32_t last_team{0};
         for (auto i{0u}; i < heroes->length; ++i) {
           const auto hero{heroes->list[i]};
@@ -168,9 +168,9 @@ void GUI::render() noexcept {
               ImGui::Separator();
             }
             if (is_enemy) {
-              ImGui::Text(" Enemy champions");
+              ImGui::Text(" Enemy Champions");
             } else {
-              ImGui::Text(" Ally champions");
+              ImGui::Text(" Ally Champions");
             }
             last_team = hero_team;
           }
@@ -182,9 +182,9 @@ void GUI::render() noexcept {
 
           std::snprintf(
             this->str_buffer, sizeof(this->str_buffer),
-            cheatManager.config->heroName ? "HeroName: [ %s ]##%X" : "PlayerName: [ %s ]##%X",
-            cheatManager.config->heroName ? hero->get_character_data_stack()->base_skin.model.str
-                                          : hero->get_name()->c_str(),
+            cheatManager.config->usePlayerNames ? "Player name: [ %s ]##%X" : "Hero name: [ %s ]##%X",
+            cheatManager.config->usePlayerNames ? hero->get_name()->c_str()
+                                                : hero->get_character_data_stack()->base_skin.model.str,
             reinterpret_cast<std::uintptr_t>(hero)
           );
 
@@ -205,9 +205,9 @@ void GUI::render() noexcept {
       }
 
       if (ImGui::BeginTabItem("Global Skins")) {
-        ImGui::Text("Global Skins Settings:");
+        ImGui::Text("Global Skin Settings:");
         if (ImGui::Combo(
-              "Minion Skins:", &cheatManager.config->current_combo_minion_index, vector_getter_default,
+              "Minion Skin:", &cheatManager.config->current_combo_minion_index, vector_getter_default,
               static_cast<void *>(&cheatManager.database->minions_skins),
               cheatManager.database->minions_skins.size() + 1
             )) {
@@ -215,21 +215,21 @@ void GUI::render() noexcept {
         }
         ImGui::Separator();
         if (ImGui::Combo(
-              "Order Turret Skins:", &cheatManager.config->current_combo_order_turret_index, vector_getter_default,
+              "Order Turret Skin:", &cheatManager.config->current_combo_order_turret_index, vector_getter_default,
               static_cast<void *>(&cheatManager.database->turret_skins), cheatManager.database->turret_skins.size() + 1
             )) {
           changeTurretSkin(cheatManager.config->current_combo_order_turret_index - 1, 100);
         }
         if (ImGui::Combo(
-              "Chaos Turret Skins:", &cheatManager.config->current_combo_chaos_turret_index, vector_getter_default,
+              "Chaos Turret Skin:", &cheatManager.config->current_combo_chaos_turret_index, vector_getter_default,
               static_cast<void *>(&cheatManager.database->turret_skins), cheatManager.database->turret_skins.size() + 1
             )) {
           changeTurretSkin(cheatManager.config->current_combo_chaos_turret_index - 1, 200);
         }
         ImGui::Separator();
-        ImGui::Text("Jungle Mobs Skins Settings:");
+        ImGui::Text("Jungle Mob Skin Settings:");
         for (auto &it : cheatManager.database->jungle_mobs_skins) {
-          std::snprintf(str_buffer, 256, "Current %s skin", it.name);
+          std::snprintf(str_buffer, 256, "%s Skin:", it.name);
           const auto config_entry{
             cheatManager.config->current_combo_jungle_mob_skin_index.insert({it.name_hashes.front(), 0})};
           if (ImGui::Combo(
@@ -252,13 +252,11 @@ void GUI::render() noexcept {
 
       if (ImGui::BeginTabItem("Extras")) {
         ImGui::hotkey("Menu Key", cheatManager.config->menuKey);
-        ImGui::Checkbox(
-          cheatManager.config->heroName ? "HeroName based" : "PlayerName based", &cheatManager.config->heroName
-        );
+        ImGui::Checkbox("Show Player Names", &cheatManager.config->usePlayerNames);
         ImGui::Checkbox("Quick Skin Change", &cheatManager.config->quickSkinChange);
         ImGui::hoverInfo(
-          "It allows you to change skin without opening the "
-          "menu with the key you assign from the keyboard."
+          "Allows you to quickly change skin "
+          "with the assigned key."
         );
 
         if (cheatManager.config->quickSkinChange) {
@@ -269,10 +267,10 @@ void GUI::render() noexcept {
         }
 
         if (player) {
-          ImGui::InputText("Change Nick", player->get_name());
+          ImGui::InputText("Custom Nickname", player->get_name());
         }
 
-        if (ImGui::Button("No skins except local player")) {
+        if (ImGui::Button("Remove Champion Skins")) {
           for (auto &enemy : cheatManager.config->current_combo_enemy_skin_index) {
             enemy.second = 1;
           }
@@ -289,8 +287,8 @@ void GUI::render() noexcept {
           }
         }
         ImGui::hoverInfo(
-          "Sets the skins of all champions except the local "
-          "player to the default skin."
+          "Remove the skins of all champions "
+          "except for the player's."
         );
 
         if (ImGui::Button("Random Skins")) {
@@ -321,7 +319,7 @@ void GUI::render() noexcept {
             }
           }
         }
-        ImGui::hoverInfo("Randomly changes the skin of all champions.");
+        ImGui::hoverInfo("Sets a random skin for all champions.");
 
         ImGui::SliderFloat("Font Scale", &cheatManager.config->fontScale, 1.0f, 2.0f, "%.3f");
         if (ImGui::GetIO().FontGlobalScale != cheatManager.config->fontScale) {

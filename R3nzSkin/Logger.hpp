@@ -51,7 +51,7 @@ class R3nzSkinLogger {
     filter.Draw("Filter", -100.0f);
 
     ImGui::Separator();
-    ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+    ImGui::BeginChild("scrolling", ImVec2(0, 200), false, ImGuiWindowFlags_HorizontalScrollbar);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 

@@ -21,7 +21,7 @@ class Config {
   KeyBind nextSkinKey{KeyBind(KeyBind::PAGE_UP)};
   KeyBind previousSkinKey{KeyBind(KeyBind::PAGE_DOWN)};
   float fontScale{1.0f};
-  bool heroName{true};
+  bool usePlayerNames{true};
   bool quickSkinChange{false};
   // player
   std::int32_t current_combo_skin_index{0};

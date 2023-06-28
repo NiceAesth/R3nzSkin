@@ -42,7 +42,7 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
 
   cheatManager.start();
   if (HideThread(::GetCurrentThread())) {
-    cheatManager.logger->addLog("Thread Hided!\n");
+    cheatManager.logger->addLog("Thread hidden!\n");
   }
 
   cheatManager.memory->Search(true);
@@ -55,16 +55,16 @@ __declspec(safebuffers) static void WINAPI DllAttach([[maybe_unused]] LPVOID lp)
       break;
     }
   }
-  cheatManager.logger->addLog("GameClient found!\n");
+  cheatManager.logger->addLog("Game client found!\n");
 
   std::this_thread::sleep_for(500ms);
   cheatManager.memory->Search(false);
-  cheatManager.logger->addLog("All offsets found!\n");
+  cheatManager.logger->addLog("Offsets found!\n");
   std::this_thread::sleep_for(500ms);
 
   cheatManager.config->init();
   cheatManager.config->load();
-  cheatManager.logger->addLog("CFG loaded!\n");
+  cheatManager.logger->addLog("Config loaded!\n");
 
   cheatManager.hooks->install();
 

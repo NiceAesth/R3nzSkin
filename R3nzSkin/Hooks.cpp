@@ -22,9 +22,8 @@
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 static inline void testFunc() noexcept {
-  // The codes you write here are executed when you press the F7 key in the game.
+  // This function is called on pressing the F7 key ingame.
 
-  // Example Func
   const auto minions{cheatManager.memory->minionList};
   for (auto i{0u}; i < minions->length; ++i) {
     const auto minion{minions->list[i]};
@@ -155,7 +154,7 @@ static void WINAPI create_render_target() noexcept {
 
 static void init_imgui(void *device, bool is_d3d11 = false) noexcept {
   cheatManager.database->load();
-  cheatManager.logger->addLog("All skins loaded from memory!\n");
+  cheatManager.logger->addLog("Skins loaded from memory!\n");
   ImGui::CreateContext();
   auto &style{ImGui::GetStyle()};
 
