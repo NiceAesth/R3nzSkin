@@ -34,7 +34,7 @@ jobs:
       uses: thedoctor0/zip-release@0.7.1
       with:
         type: 'zip'
-        directory: 'Release/${{matrix.BUILD_CONFIGURATION'
+        directory: 'Release/${{matrix.BUILD_CONFIGURATION}}'
         filename: 'R3nzSkin-${{matrix.BUILD_CONFIGURATION}}.zip'
         
     - name: Upload Release
