@@ -3,5 +3,5 @@
 #include "AIBaseCommon.hpp"
 
 class AITurret : public AIBaseCommon {
-public:
+ public:
 };
