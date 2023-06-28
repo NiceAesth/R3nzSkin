@@ -16,7 +16,7 @@ inline static void footer() noexcept {
   static const auto buildText{"Last Build: "s + __DATE__ + " - " + __TIME__};
   ImGui::Separator();
   ImGui::textUnformattedCentered(buildText.c_str());
-  ImGui::textUnformattedCentered("Copyright (C) 2021-2023 R3nzTheCodeGOD");
+  ImGui::textUnformattedCentered("(C) 2021-2023 R3nzTheCodeGOD, NiceAesth");
 }
 
 static void changeTurretSkin(const std::int32_t skinId, const std::int32_t team) noexcept {
