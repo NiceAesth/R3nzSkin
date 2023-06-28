@@ -8,14 +8,17 @@ on:
 
 env:
   SOLUTION_FILE_PATH: R3nzSkin.sln
-  BUILD_CONFIGURATION: RiotGamesServers
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
     runs-on: windows-latest
+
+    strategy:
+      matrix:
+        BUILD_CONFIGURATION: [Riot-SSE2, Riot-AVX2, China-SSE2, China-AVX2]
 
     steps:
     - uses: actions/checkout@v3
@@ -25,4 +28,18 @@ jobs:
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Platform=x64 /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+      run: msbuild /m /p:Platform=x64 /p:Configuration=${{matrix.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Archive Release
+      uses: thedoctor0/zip-release@0.7.1
+      with:
+        type: 'zip'
+        directory: 'Release/${{matrix.BUILD_CONFIGURATION'
+        filename: 'R3nzSkin-${{matrix.BUILD_CONFIGURATION}}.zip'
+        
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        artifacts: 'R3nzSkin-${{matrix.BUILD_CONFIGURATION}}.zip'
+        allowUpdates: true
+        
