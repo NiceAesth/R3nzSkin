@@ -338,7 +338,7 @@ ref class R3nzUI : public System::Windows::Forms::Form {
     this->linkLabel->Size         = System::Drawing::Size(207, 14);
     this->linkLabel->TabIndex     = 11;
     this->linkLabel->TabStop      = true;
-    this->linkLabel->Text         = L"Copyright (c) 2021-2023 R3nzTheCodeGOD, NiceAesth";
+    this->linkLabel->Text         = L"(c) 2021-2023 R3nzTheCodeGOD, NiceAesth";
     this->linkLabel->TextAlign    = System::Drawing::ContentAlignment::MiddleCenter;
     this->linkLabel->LinkClicked +=
       gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &R3nzUI::linkLabel_Click);
