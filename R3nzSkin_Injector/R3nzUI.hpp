@@ -61,7 +61,7 @@ namespace R3nzSkinInjector {
 				Directory::CreateDirectory(settingsFolder);
 			}
 			
-			File::WriteAllText(settingsFilePath, System::Convert::ToString(this->toolstripmenuItem2->Checked));
+			File::WriteAllText(settingsFilePath, System::Convert::ToString(this->trayHideMenuItem->Checked));
 		}
 		void loadSettings() {
 			auto appDataPath = Environment::GetFolderPath(Environment::SpecialFolder::MyDocuments);
@@ -73,69 +73,69 @@ namespace R3nzSkinInjector {
 			}
 
 			if (File::Exists(settingsFilePath)) {
-				this->toolstripmenuItem2->Checked = System::Boolean::Parse(File::ReadAllText(settingsFilePath));
+				this->trayHideMenuItem->Checked = System::Boolean::Parse(File::ReadAllText(settingsFilePath));
 			}
 		}
 	protected:
 		~R3nzUI() { if (components) delete components; }
-	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Button^ injectButton;
 	private: System::Windows::Forms::Label^ injectorStatusLabel;
 	private: System::Windows::Forms::Label^ r3nzSkinStatusLabel;
 	private: System::Windows::Forms::Label^ gameStatusLabel;
-	private: System::Windows::Forms::GroupBox^ groupBox1;
-	private: System::Windows::Forms::GroupBox^ groupBox2;
+	private: System::Windows::Forms::GroupBox^ injectorStatusBox;
+	private: System::Windows::Forms::GroupBox^ clientStatusBox;
 	private: System::Windows::Forms::Label^ clientStatusLabel;
-	private: System::Windows::Forms::GroupBox^ groupBox3;
-	private: System::Windows::Forms::GroupBox^ groupBox4;
-	private: System::Windows::Forms::LinkLabel^ linkLabel1;
+	private: System::Windows::Forms::GroupBox^ gameStatusBox;
+	private: System::Windows::Forms::GroupBox^ r3nzSkinStatusBox;
+	private: System::Windows::Forms::LinkLabel^ linkLabel;
 	private: System::ComponentModel::Container^ components;
-	private: System::Windows::Forms::NotifyIcon^ notifyIcon;
+	private: System::Windows::Forms::NotifyIcon^ trayIcon;
 	private: System::Windows::Forms::ContextMenu^ contextMenu;
-	private: System::Windows::Forms::MenuItem^ menuItem;
-	private: System::Windows::Forms::MenuItem^ menuItem2;
+	private: System::Windows::Forms::MenuItem^ trayCloseButton;
+	private: System::Windows::Forms::MenuItem^ trayInjectButton;
 	private: System::Windows::Forms::MenuStrip^ menuStrip;
-	private: System::Windows::Forms::ToolStripMenuItem^ toolstripmenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ toolstripmenuItem2;
+	private: System::Windows::Forms::ToolStripMenuItem^ preferenceMenu;
+	private: System::Windows::Forms::ToolStripMenuItem^ trayHideMenuItem;
 #pragma region Windows Form Designer generated code
 		   void InitializeComponent(void)
 		   {
 			   auto resources = (gcnew System::ComponentModel::ComponentResourceManager(R3nzUI::typeid));
-			   this->button1 = (gcnew System::Windows::Forms::Button());
+			   this->injectButton = (gcnew System::Windows::Forms::Button());
 			   this->injectorStatusLabel = (gcnew System::Windows::Forms::Label());
 			   this->r3nzSkinStatusLabel = (gcnew System::Windows::Forms::Label());
 			   this->gameStatusLabel = (gcnew System::Windows::Forms::Label());
-			   this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
-			   this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
+			   this->injectorStatusBox = (gcnew System::Windows::Forms::GroupBox());
+			   this->clientStatusBox = (gcnew System::Windows::Forms::GroupBox());
 			   this->clientStatusLabel = (gcnew System::Windows::Forms::Label());
-			   this->groupBox3 = (gcnew System::Windows::Forms::GroupBox());
-			   this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
-			   this->linkLabel1 = (gcnew System::Windows::Forms::LinkLabel());
-			   this->notifyIcon = (gcnew System::Windows::Forms::NotifyIcon());
+			   this->gameStatusBox = (gcnew System::Windows::Forms::GroupBox());
+			   this->r3nzSkinStatusBox = (gcnew System::Windows::Forms::GroupBox());
+			   this->linkLabel = (gcnew System::Windows::Forms::LinkLabel());
+			   this->trayIcon = (gcnew System::Windows::Forms::NotifyIcon());
 			   this->contextMenu = (gcnew System::Windows::Forms::ContextMenu());
-			   this->menuItem = (gcnew System::Windows::Forms::MenuItem());
-			   this->menuItem2 = (gcnew System::Windows::Forms::MenuItem());
+			   this->trayCloseButton = (gcnew System::Windows::Forms::MenuItem());
+			   this->trayInjectButton = (gcnew System::Windows::Forms::MenuItem());
 			   this->menuStrip = (gcnew System::Windows::Forms::MenuStrip());
-			   this->toolstripmenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			   this->toolstripmenuItem2 = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			   this->groupBox1->SuspendLayout();
-			   this->groupBox2->SuspendLayout();
-			   this->groupBox3->SuspendLayout();
-			   this->groupBox4->SuspendLayout();
+			   this->preferenceMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			   this->trayHideMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			   this->injectorStatusBox->SuspendLayout();
+			   this->clientStatusBox->SuspendLayout();
+			   this->gameStatusBox->SuspendLayout();
+			   this->r3nzSkinStatusBox->SuspendLayout();
 			   this->SuspendLayout();
 			   // 
-			   // button1
+			   // injectButton
 			   // 
-			   this->button1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(245)), static_cast<System::Int32>(static_cast<System::Byte>(8)), static_cast<System::Int32>(static_cast<System::Byte>(83)));
-			   this->button1->Cursor = System::Windows::Forms::Cursors::Hand;
-			   this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			   this->button1->Font = (gcnew System::Drawing::Font(L"Arial", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
-			   this->button1->Location = System::Drawing::Point(12, 28);
-			   this->button1->Name = L"button1";
-			   this->button1->Size = System::Drawing::Size(250, 50);
-			   this->button1->TabIndex = 0;
-			   this->button1->Text = L"Start";
-			   this->button1->UseVisualStyleBackColor = false;
-			   this->button1->Click += gcnew System::EventHandler(this, &R3nzUI::button1_Click);
+			   this->injectButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(245)), static_cast<System::Int32>(static_cast<System::Byte>(8)), static_cast<System::Int32>(static_cast<System::Byte>(83)));
+			   this->injectButton->Cursor = System::Windows::Forms::Cursors::Hand;
+			   this->injectButton->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			   this->injectButton->Font = (gcnew System::Drawing::Font(L"Arial", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
+			   this->injectButton->Location = System::Drawing::Point(12, 28);
+			   this->injectButton->Name = L"injectButton";
+			   this->injectButton->Size = System::Drawing::Size(250, 50);
+			   this->injectButton->TabIndex = 0;
+			   this->injectButton->Text = L"Start";
+			   this->injectButton->UseVisualStyleBackColor = false;
+			   this->injectButton->Click += gcnew System::EventHandler(this, &R3nzUI::injectButton_Click);
 			   // 
 			   // injectorStatusLabel
 			   // 
@@ -173,31 +173,31 @@ namespace R3nzSkinInjector {
 			   this->gameStatusLabel->TabIndex = 3;
 			   this->gameStatusLabel->Text = L"Not Found";
 			   // 
-			   // groupBox1
+			   // injectorStatusBox
 			   // 
-			   this->groupBox1->Controls->Add(this->injectorStatusLabel);
-			   this->groupBox1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			   this->groupBox1->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
-			   this->groupBox1->ForeColor = System::Drawing::Color::White;
-			   this->groupBox1->Location = System::Drawing::Point(12, 79);
-			   this->groupBox1->Name = L"groupBox1";
-			   this->groupBox1->Size = System::Drawing::Size(250, 45);
-			   this->groupBox1->TabIndex = 5;
-			   this->groupBox1->TabStop = false;
-			   this->groupBox1->Text = L"Injector Status";
+			   this->injectorStatusBox->Controls->Add(this->injectorStatusLabel);
+			   this->injectorStatusBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			   this->injectorStatusBox->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
+			   this->injectorStatusBox->ForeColor = System::Drawing::Color::White;
+			   this->injectorStatusBox->Location = System::Drawing::Point(12, 79);
+			   this->injectorStatusBox->Name = L"injectorStatusBox";
+			   this->injectorStatusBox->Size = System::Drawing::Size(250, 45);
+			   this->injectorStatusBox->TabIndex = 5;
+			   this->injectorStatusBox->TabStop = false;
+			   this->injectorStatusBox->Text = L"Injector Status";
 			   // 
-			   // groupBox2
+			   // clientStatusBox
 			   // 
-			   this->groupBox2->Controls->Add(this->clientStatusLabel);
-			   this->groupBox2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			   this->groupBox2->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
-			   this->groupBox2->ForeColor = System::Drawing::Color::White;
-			   this->groupBox2->Location = System::Drawing::Point(12, 130);
-			   this->groupBox2->Name = L"groupBox2";
-			   this->groupBox2->Size = System::Drawing::Size(250, 45);
-			   this->groupBox2->TabIndex = 7;
-			   this->groupBox2->TabStop = false;
-			   this->groupBox2->Text = L"LeagueClient Status";
+			   this->clientStatusBox->Controls->Add(this->clientStatusLabel);
+			   this->clientStatusBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			   this->clientStatusBox->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
+			   this->clientStatusBox->ForeColor = System::Drawing::Color::White;
+			   this->clientStatusBox->Location = System::Drawing::Point(12, 130);
+			   this->clientStatusBox->Name = L"clientStatusBox";
+			   this->clientStatusBox->Size = System::Drawing::Size(250, 45);
+			   this->clientStatusBox->TabIndex = 7;
+			   this->clientStatusBox->TabStop = false;
+			   this->clientStatusBox->Text = L"LeagueClient Status";
 			   // 
 			   // clientStatusLabel
 			   // 
@@ -211,76 +211,76 @@ namespace R3nzSkinInjector {
 			   this->clientStatusLabel->TabIndex = 0;
 			   this->clientStatusLabel->Text = L"Not Found";
 			   // 
-			   // groupBox3
+			   // gameStatusBox
 			   // 
-			   this->groupBox3->Controls->Add(this->gameStatusLabel);
-			   this->groupBox3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			   this->groupBox3->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
-			   this->groupBox3->ForeColor = System::Drawing::Color::White;
-			   this->groupBox3->Location = System::Drawing::Point(12, 181);
-			   this->groupBox3->Name = L"groupBox3";
-			   this->groupBox3->Size = System::Drawing::Size(250, 45);
-			   this->groupBox3->TabIndex = 8;
-			   this->groupBox3->TabStop = false;
-			   this->groupBox3->Text = L"LeagueGame Status";
+			   this->gameStatusBox->Controls->Add(this->gameStatusLabel);
+			   this->gameStatusBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			   this->gameStatusBox->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
+			   this->gameStatusBox->ForeColor = System::Drawing::Color::White;
+			   this->gameStatusBox->Location = System::Drawing::Point(12, 181);
+			   this->gameStatusBox->Name = L"gameStatusBox";
+			   this->gameStatusBox->Size = System::Drawing::Size(250, 45);
+			   this->gameStatusBox->TabIndex = 8;
+			   this->gameStatusBox->TabStop = false;
+			   this->gameStatusBox->Text = L"LeagueGame Status";
 			   // 
-			   // groupBox4
+			   // r3nzSkinStatusBox
 			   // 
-			   this->groupBox4->Controls->Add(this->r3nzSkinStatusLabel);
-			   this->groupBox4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			   this->groupBox4->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
-			   this->groupBox4->ForeColor = System::Drawing::Color::White;
-			   this->groupBox4->Location = System::Drawing::Point(12, 232);
-			   this->groupBox4->Name = L"groupBox4";
-			   this->groupBox4->Size = System::Drawing::Size(250, 45);
-			   this->groupBox4->TabIndex = 9;
-			   this->groupBox4->TabStop = false;
-			   this->groupBox4->Text = L"R3nzSkin Status";
+			   this->r3nzSkinStatusBox->Controls->Add(this->r3nzSkinStatusLabel);
+			   this->r3nzSkinStatusBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			   this->r3nzSkinStatusBox->Font = (gcnew System::Drawing::Font(L"Arial", 6.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
+			   this->r3nzSkinStatusBox->ForeColor = System::Drawing::Color::White;
+			   this->r3nzSkinStatusBox->Location = System::Drawing::Point(12, 232);
+			   this->r3nzSkinStatusBox->Name = L"r3nzSkinStatusBox";
+			   this->r3nzSkinStatusBox->Size = System::Drawing::Size(250, 45);
+			   this->r3nzSkinStatusBox->TabIndex = 9;
+			   this->r3nzSkinStatusBox->TabStop = false;
+			   this->r3nzSkinStatusBox->Text = L"R3nzSkin Status";
 			   // 
-			   // linkLabel1
+			   // linkLabel
 			   // 
-			   this->linkLabel1->AutoSize = true;
-			   this->linkLabel1->Cursor = System::Windows::Forms::Cursors::Hand;
-			   this->linkLabel1->LinkBehavior = System::Windows::Forms::LinkBehavior::NeverUnderline;
-			   this->linkLabel1->LinkColor = System::Drawing::Color::Silver;
-			   this->linkLabel1->Location = System::Drawing::Point(20, 284);
-			   this->linkLabel1->Name = L"linkLabel1";
-			   this->linkLabel1->Size = System::Drawing::Size(207, 14);
-			   this->linkLabel1->TabIndex = 11;
-			   this->linkLabel1->TabStop = true;
-			   this->linkLabel1->Text = L"Copyright (c) 2021-2023 R3nzTheCodeGOD";
-			   this->linkLabel1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			   this->linkLabel1->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &R3nzUI::linkLabel1_LinkClicked);
+			   this->linkLabel->AutoSize = true;
+			   this->linkLabel->Cursor = System::Windows::Forms::Cursors::Hand;
+			   this->linkLabel->LinkBehavior = System::Windows::Forms::LinkBehavior::NeverUnderline;
+			   this->linkLabel->LinkColor = System::Drawing::Color::Silver;
+			   this->linkLabel->Location = System::Drawing::Point(20, 284);
+			   this->linkLabel->Name = L"linkLabel";
+			   this->linkLabel->Size = System::Drawing::Size(207, 14);
+			   this->linkLabel->TabIndex = 11;
+			   this->linkLabel->TabStop = true;
+			   this->linkLabel->Text = L"Copyright (c) 2021-2023 R3nzTheCodeGOD, NiceAesth";
+			   this->linkLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			   this->linkLabel->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &R3nzUI::linkLabel_Click);
 			   //
 			   // contextMenu
 			   //
-			   this->contextMenu->MenuItems->Add(this->menuItem);
-			   this->contextMenu->MenuItems->Add(this->menuItem2);
+			   this->contextMenu->MenuItems->Add(this->trayCloseButton);
+			   this->contextMenu->MenuItems->Add(this->trayInjectButton);
 			   //
 			   // menuItem
 			   //
-			   this->menuItem2->Index = 0;
-			   this->menuItem2->Text = L"Start";
-			   this->menuItem2->Click += gcnew System::EventHandler(this, &R3nzUI::menuItem2_OnClick);
-			   this->menuItem->Index = 1;
-			   this->menuItem->Text = L"Exit";
-			   this->menuItem->Click += gcnew System::EventHandler(this, &R3nzUI::menuItem_OnClick);
+			   this->trayInjectButton->Index = 0;
+			   this->trayInjectButton->Text = L"Start";
+			   this->trayInjectButton->Click += gcnew System::EventHandler(this, &R3nzUI::trayInjectButton_Click);
+			   this->trayCloseButton->Index = 1;
+			   this->trayCloseButton->Text = L"Exit";
+			   this->trayCloseButton->Click += gcnew System::EventHandler(this, &R3nzUI::trayCloseButton_Click);
 			   //
-			   // notifyIcon
+			   // trayIcon
 			   //
-			   this->notifyIcon->Text = L"R3nzSkin";
-			   this->notifyIcon->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			   this->notifyIcon->Visible = false;
-			   this->notifyIcon->ContextMenu = this->contextMenu;
-			   this->notifyIcon->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &R3nzUI::notifyIcon_MouseDoubleClick);
+			   this->trayIcon->Text = L"R3nzSkin";
+			   this->trayIcon->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+			   this->trayIcon->Visible = false;
+			   this->trayIcon->ContextMenu = this->contextMenu;
+			   this->trayIcon->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &R3nzUI::trayIcon_MouseDoubleClick);
 			   //
 			   // menuStrip
 			   //
-			   this->toolstripmenuItem->Text = L"Preferences";
-			   this->toolstripmenuItem2->Text = L"Hide to tray";
-			   this->toolstripmenuItem2->Click += gcnew System::EventHandler(this, &R3nzUI::toolstripmenuItem2_OnClick);
-			   this->toolstripmenuItem->DropDownItems->Add(this->toolstripmenuItem2);
-			   this->menuStrip->Items->Add(this->toolstripmenuItem);
+			   this->preferenceMenu->Text = L"Preferences";
+			   this->trayHideMenuItem->Text = L"Hide to tray";
+			   this->trayHideMenuItem->Click += gcnew System::EventHandler(this, &R3nzUI::trayHideMenuItem_Click);
+			   this->preferenceMenu->DropDownItems->Add(this->trayHideMenuItem);
+			   this->menuStrip->Items->Add(this->preferenceMenu);
 			   this->Controls->Add(this->menuStrip);
 			   // 
 			   // R3nzUI
@@ -289,12 +289,12 @@ namespace R3nzSkinInjector {
 			   this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			   this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(30)), static_cast<System::Int32>(static_cast<System::Byte>(30)));
 			   this->ClientSize = System::Drawing::Size(273, 307);
-			   this->Controls->Add(this->linkLabel1);
-			   this->Controls->Add(this->groupBox4);
-			   this->Controls->Add(this->groupBox3);
-			   this->Controls->Add(this->groupBox2);
-			   this->Controls->Add(this->groupBox1);
-			   this->Controls->Add(this->button1);
+			   this->Controls->Add(this->linkLabel);
+			   this->Controls->Add(this->injectorStatusBox);
+			   this->Controls->Add(this->gameStatusBox);
+			   this->Controls->Add(this->clientStatusBox);
+			   this->Controls->Add(this->r3nzSkinStatusBox);
+			   this->Controls->Add(this->injectButton);
 			   this->Cursor = System::Windows::Forms::Cursors::Arrow;
 			   this->Font = (gcnew System::Drawing::Font(L"Arial", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(162)));
 			   this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
@@ -305,14 +305,14 @@ namespace R3nzSkinInjector {
 			   this->Text = L"R3nzSkin";
 			   this->Load += gcnew System::EventHandler(this, &R3nzUI::R3nzUI_Load);
 			   this->Resize += gcnew System::EventHandler(this, &R3nzUI::R3nzUI_Resize);
-			   this->groupBox1->ResumeLayout(false);
-			   this->groupBox1->PerformLayout();
-			   this->groupBox2->ResumeLayout(false);
-			   this->groupBox2->PerformLayout();
-			   this->groupBox3->ResumeLayout(false);
-			   this->groupBox3->PerformLayout();
-			   this->groupBox4->ResumeLayout(false);
-			   this->groupBox4->PerformLayout();
+			   this->injectorStatusBox->ResumeLayout(false);
+			   this->injectorStatusBox->PerformLayout();
+			   this->clientStatusBox->ResumeLayout(false);
+			   this->clientStatusBox->PerformLayout();
+			   this->gameStatusBox->ResumeLayout(false);
+			   this->gameStatusBox->PerformLayout();
+			   this->r3nzSkinStatusBox->ResumeLayout(false);
+			   this->r3nzSkinStatusBox->PerformLayout();
 			   this->ResumeLayout(false);
 			   this->PerformLayout();
 		   }
@@ -329,64 +329,64 @@ namespace R3nzSkinInjector {
 			MessageBox::Show(exception);
 		}
 	private:
-		System::Void button1_Click(System::Object^ sender, System::EventArgs^ e)
+		System::Void injectButton_Click(System::Object^ sender, System::EventArgs^ e)
 		{
 			btnState = !btnState;
 			if (btnState) {
-				this->button1->BackColor = System::Drawing::Color::FromArgb(255, 252, 220, 107);
+				this->injectButton->BackColor = System::Drawing::Color::FromArgb(255, 252, 220, 107);
 				this->injectorStatusLabel->ForeColor = System::Drawing::Color::FromArgb(255, 252, 220, 107);
-				this->button1->Text = L"Stop";
+				this->injectButton->Text = L"Stop";
 				this->injectorStatusLabel->Text = L"Working";
-				this->menuItem2->Text = L"Stop";
+				this->trayInjectButton->Text = L"Stop";
 			} else {
-				this->button1->BackColor = System::Drawing::Color::FromArgb(255, 245, 8, 83);
+				this->injectButton->BackColor = System::Drawing::Color::FromArgb(255, 245, 8, 83);
 				this->injectorStatusLabel->ForeColor = System::Drawing::Color::FromArgb(255, 245, 8, 83);
-				this->button1->Text = L"Start";
+				this->injectButton->Text = L"Start";
 				this->injectorStatusLabel->Text = L"Stopped";
-				this->menuItem2->Text = L"Start";
+				this->trayInjectButton->Text = L"Start";
 			}
 		}
 	private:
-		System::Void linkLabel1_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e)
+		System::Void linkLabel_Click(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e)
 		{
-			System::Diagnostics::Process::Start(L"https://github.com/R3nzTheCodeGOD/R3nzSkin");
+			System::Diagnostics::Process::Start(L"https://github.com/NiceAesth/R3nzSkin");
 		}
 	private:
 		System::Void R3nzUI_Resize(System::Object^ sender, System::EventArgs^ e)
 		{
 			if (this->WindowState == FormWindowState::Minimized) 
 			{
-				if (this->toolstripmenuItem2->Checked) 
+				if (this->trayHideMenuItem->Checked) 
 				{
 					this->Hide();
-					this->notifyIcon->Visible = true;
+					this->trayIcon->Visible = true;
 				}
 			}
 		}
 	private:
-		System::Void notifyIcon_MouseDoubleClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
+		System::Void trayIcon_MouseDoubleClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 		{
-			if (this->toolstripmenuItem2->Checked)
+			if (this->trayHideMenuItem->Checked)
 			{
 				this->Show();
 				this->WindowState = FormWindowState::Normal;
-				this->notifyIcon->Visible = false;
+				this->trayIcon->Visible = false;
 			}
 		}
 	private:
-		System::Void menuItem_OnClick(System::Object^ sender, System::EventArgs^ e)
+		System::Void trayInjectButton_Click(System::Object^ sender, System::EventArgs^ e)
+		{
+			this->injectButton_Click(nullptr, nullptr);
+		}
+	private:
+		System::Void trayCloseButton_Click(System::Object^ sender, System::EventArgs^ e)
 		{
 			this->Close();
 		}
 	private:
-		System::Void menuItem2_OnClick(System::Object^ sender, System::EventArgs^ e)
+		System::Void trayHideMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 		{
-			this->button1_Click(nullptr, nullptr);
-		}
-	private:
-		System::Void toolstripmenuItem2_OnClick(System::Object^ sender, System::EventArgs^ e)
-		{
-			this->toolstripmenuItem2->Checked = !this->toolstripmenuItem2->Checked;
+			this->trayHideMenuItem->Checked = !this->trayHideMenuItem->Checked;
 			this->saveSettings();
 		}
 	};
