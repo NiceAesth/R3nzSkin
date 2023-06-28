@@ -1,0 +1,14 @@
+BasedOnStyle: Chromium
+
+ColumnLimit: 120
+PointerAlignment: Right
+ContinuationIndentWidth: 2
+
+InsertBraces: True
+
+AlignOperands: AlignAfterOperator
+AlignAfterOpenBracket: BlockIndent
+AlignConsecutiveAssignments: Consecutive
+
+AllowShortLambdasOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Empty

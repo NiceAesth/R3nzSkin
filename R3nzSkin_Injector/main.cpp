@@ -1,12 +1,12 @@
 #include <Windows.h>
-#include <ctime>
-#include <cstdlib>
-#include <thread>
-#include <regex>
 #include <msclr/marshal_cppstd.h>
+#include <cstdlib>
+#include <ctime>
+#include <regex>
+#include <thread>
 
-#include "R3nzUI.hpp"
 #include "Injector.hpp"
+#include "R3nzUI.hpp"
 #include "lazy_importer.hpp"
 
 using namespace System;
@@ -15,27 +15,27 @@ using namespace System::Threading;
 using namespace System::Globalization;
 using namespace System::Net;
 
-int main([[maybe_unused]] array<String^>^ args)
-{
-	std::srand(static_cast<unsigned int>(std::time(nullptr)));
-	Injector::ensureDLL();
-	Injector::autoUpdate();
+int main([[maybe_unused]] array<String ^> ^ args) {
+  std::srand(static_cast<unsigned int>(std::time(nullptr)));
+  Injector::ensureDLL();
+  Injector::autoUpdate();
 
-	if(!System::Diagnostics::Debugger::IsAttached)
-		Injector::renameExe();
-	
-	Application::EnableVisualStyles();
-	Application::SetCompatibleTextRenderingDefault(false);
-	R3nzSkinInjector::R3nzUI form;
+  if (!System::Diagnostics::Debugger::IsAttached) {
+    Injector::renameExe();
+  }
 
-	auto thread{ std::thread(Injector::run) };
-	auto screenThread{ gcnew Thread(gcnew ThreadStart(%form, &R3nzSkinInjector::R3nzUI::updateScreen)) };
-	screenThread->Start();
+  Application::EnableVisualStyles();
+  Application::SetCompatibleTextRenderingDefault(false);
+  R3nzSkinInjector::R3nzUI form;
 
-	Application::Run(%form);
+  auto thread{std::thread(Injector::run)};
+  auto screenThread{gcnew Thread(gcnew ThreadStart(% form, &R3nzSkinInjector::R3nzUI::updateScreen))};
+  screenThread->Start();
 
-	thread.detach();
-	screenThread->Abort();
+  Application::Run(% form);
 
-	return EXIT_SUCCESS;
+  thread.detach();
+  screenThread->Abort();
+
+  return EXIT_SUCCESS;
 }
