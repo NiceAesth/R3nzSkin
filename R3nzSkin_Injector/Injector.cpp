@@ -154,6 +154,17 @@ std::string Injector::randomString(std::uint32_t size) noexcept
 	return tmp_s;
 }
 
+void Injector::ensureDLL()
+{
+	bool fileExists = System::IO::File::Exists(L"R3nzSkin.dll");
+	if (!fileExists) {
+		auto result = MessageBox::Show(L"Your version of R3nzSkin is missing important files. Please redownload if you wish to continue.", L"R3nzSkin", MessageBoxButtons::OKCancel, MessageBoxIcon::Error);
+		if (result == DialogResult::OK)
+			System::Diagnostics::Process::Start(L"https://github.com/NiceAesth/R3nzSkin/releases");
+		System::Environment::Exit(0);
+	}
+}
+
 void Injector::autoUpdate()
 {
 	WebClient^ client = gcnew WebClient();

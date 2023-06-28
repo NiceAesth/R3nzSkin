@@ -18,8 +18,11 @@ using namespace System::Net;
 int main([[maybe_unused]] array<String^>^ args)
 {
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
+	Injector::ensureDLL();
 	Injector::autoUpdate();
-	Injector::renameExe();
+
+	if(!System::Diagnostics::Debugger::IsAttached)
+		Injector::renameExe();
 	
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
