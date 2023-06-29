@@ -3,45 +3,45 @@ import json
 import os
 
 
-def skin_to_dictionary(path):
+def get_lolskin_settings(path: str) -> dict[str, str]:
     config = configparser.ConfigParser()
-
     config.read(path, encoding="utf-8")
-    ini_dict = {}
-    for key, values in config.items():
-        ini_dict[key] = dict(config.items(key))
-        print(values)
-    lolskin_hero_skin = ini_dict["SKIN_CHAMPION_ACTIVED"]
+
+    lolskin_hero_skin = dict(config.items("SKIN_CHAMPION_ACTIVED"))
     del lolskin_hero_skin['custom_file']
 
     return lolskin_hero_skin
 
 
-def forward_data(lolskin_hero_skin: dict):
-    # Convert lolskin's skin data to R3nzSkin
-    dict_from_list = {}
+def convert_settings(lolskin_hero_skin: dict) -> dict[str, int]:
+    # Convert lolskin settings to R3nzSkin settings
+    r3nz_settings = {}
 
     for key, value in lolskin_hero_skin.items():
-        key = key.capitalize()
-        key = key + ".current_combo_skin_index"
-        value = int(value) + int(1)
-        dict_from_list[key] = value
+        item = f"{key.capitalize()}.current_combo_skin_index"
+        r3nz_settings[item] = int(value) + 1
 
-    return dict_from_list
+    return r3nz_settings
 
+
+def main() -> None:
+    while True:
+        LOLSKIN_CONFIG_PATH = input("Enter the path to Lolskin Config.ini: ")
+        if os.path.exists(LOLSKIN_CONFIG_PATH):
+            break
+        print("Lolskin Config.ini not found. Please enter a valid path.")
+
+    lolskin_settings = get_lolskin_settings(LOLSKIN_CONFIG_PATH)
+    r3nz_settings = convert_settings(lolskin_settings)
+
+    print("Converted settings:", r3nz_settings)
+
+    with open('data.json', 'w', encoding="utf-8") as fp:
+        json.dump(r3nz_settings, fp)
 
 
 if __name__ == '__main__':
-    LOLSKIN_CONFIG_PATH = r"C:\Fraps\data\My\Config.ini"
-
-    if os.path.exists(LOLSKIN_CONFIG_PATH):
-        hero_skin = skin_to_dictionary(LOLSKIN_CONFIG_PATH)
-    else:
-        LOLSKIN_CONFIG_PATH = input(
-            "lolskin Configuration file path Example:\t" + LOLSKIN_CONFIG_PATH + "\n")
-    to_skin = forward_data(lolskin_hero_skin=hero_skin)
-
-    json_str = json.dumps(to_skin)
-    print("JSON 对象：", json_str)
-    with open('data.json', 'w', encoding="utf-8") as fp:
-        json.dump(to_skin, fp)
+    try:
+        main()
+    except KeyboardInterrupt:
+        exit()

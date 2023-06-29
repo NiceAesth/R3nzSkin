@@ -1,7 +1,9 @@
 #pragma once
+#include "../json/json.hpp"
 
 namespace R3nzSkinInjector {
 
+using json = nlohmann::json;
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
@@ -22,6 +24,9 @@ ref class R3nzUI : public System::Windows::Forms::Form {
   R3nzUI(void) {
     InitializeComponent();
     loadSettings();
+    if (autoInjectMenuItem->Checked) {
+      injectButton_Click(nullptr, nullptr);
+    }
   }
 
  public:
@@ -54,17 +59,7 @@ ref class R3nzUI : public System::Windows::Forms::Form {
       Thread::Sleep(1000);
     }
   }
-  void saveSettings() {
-    auto appDataPath      = Environment::GetFolderPath(Environment::SpecialFolder::MyDocuments);
-    auto settingsFolder   = Path::Combine(appDataPath, L"R3nzSkin");
-    auto settingsFilePath = Path::Combine(settingsFolder, L"R3nzSkinInjector");
 
-    if (!Directory::Exists(settingsFolder)) {
-      Directory::CreateDirectory(settingsFolder);
-    }
-
-    File::WriteAllText(settingsFilePath, System::Convert::ToString(this->trayHideMenuItem->Checked));
-  }
   void loadSettings() {
     auto appDataPath      = Environment::GetFolderPath(Environment::SpecialFolder::MyDocuments);
     auto settingsFolder   = Path::Combine(appDataPath, L"R3nzSkin");
@@ -74,9 +69,48 @@ ref class R3nzUI : public System::Windows::Forms::Form {
       Directory::CreateDirectory(settingsFolder);
     }
 
-    if (File::Exists(settingsFilePath)) {
-      this->trayHideMenuItem->Checked = System::Boolean::Parse(File::ReadAllText(settingsFilePath));
+    if (!File::Exists(settingsFilePath)) {
+      return;
     }
+
+    auto lines = File::ReadAllLines(settingsFilePath);
+    if (lines->Length > 0) {
+      bool oldHideToTray;
+      if (System::Boolean::TryParse(lines[0], oldHideToTray)) {
+        this->trayHideMenuItem->Checked = oldHideToTray;
+        saveSettings();
+        return;
+      }
+    }
+
+    std::string settingsValue = msclr::interop::marshal_as<std::string>(File::ReadAllText(settingsFilePath));
+    json jsonSettings         = json::parse(settingsValue);
+
+    if (jsonSettings.contains("hideToTray")) {
+      this->trayHideMenuItem->Checked = jsonSettings["hideToTray"];
+    }
+
+    if (jsonSettings.contains("autoInject")) {
+      this->autoInjectMenuItem->Checked = jsonSettings["autoInject"];
+    }
+  }
+
+  void saveSettings() {
+    auto appDataPath      = Environment::GetFolderPath(Environment::SpecialFolder::MyDocuments);
+    auto settingsFolder   = Path::Combine(appDataPath, L"R3nzSkin");
+    auto settingsFilePath = Path::Combine(settingsFolder, L"R3nzSkinInjector");
+
+    if (!Directory::Exists(settingsFolder)) {
+      Directory::CreateDirectory(settingsFolder);
+    }
+
+    json jsonSettings;
+    jsonSettings["hideToTray"] = this->trayHideMenuItem->Checked;
+    jsonSettings["autoInject"] = this->autoInjectMenuItem->Checked;
+
+    std::string jsonString = jsonSettings.dump();
+
+    File::WriteAllText(settingsFilePath, gcnew String(jsonString.c_str()));
   }
 
  protected:
@@ -117,8 +151,9 @@ ref class R3nzUI : public System::Windows::Forms::Form {
   System::Windows::Forms::LinkLabel ^ linkLabel;
 
  private:
-  System::ComponentModel::Container ^ components;
+  System::ComponentModel::IContainer ^ components;
 
+ private:
  private:
   System::Windows::Forms::NotifyIcon ^ trayIcon;
 
@@ -132,6 +167,9 @@ ref class R3nzUI : public System::Windows::Forms::Form {
   System::Windows::Forms::MenuItem ^ trayInjectButton;
 
  private:
+  System::Windows::Forms::MenuItem ^ trayShowButton;
+
+ private:
   System::Windows::Forms::MenuStrip ^ menuStrip;
 
  private:
@@ -139,8 +177,12 @@ ref class R3nzUI : public System::Windows::Forms::Form {
 
  private:
   System::Windows::Forms::ToolStripMenuItem ^ trayHideMenuItem;
+
+ private:
+  System::Windows::Forms::ToolStripMenuItem ^ autoInjectMenuItem;
 #pragma region Windows Form Designer generated code
   void InitializeComponent(void) {
+    this->components = (gcnew System::ComponentModel::Container());
     System::ComponentModel::ComponentResourceManager ^ resources =
       (gcnew System::ComponentModel::ComponentResourceManager(R3nzUI::typeid));
     this->injectButton        = (gcnew System::Windows::Forms::Button());
@@ -153,17 +195,20 @@ ref class R3nzUI : public System::Windows::Forms::Form {
     this->gameStatusBox       = (gcnew System::Windows::Forms::GroupBox());
     this->r3nzSkinStatusBox   = (gcnew System::Windows::Forms::GroupBox());
     this->linkLabel           = (gcnew System::Windows::Forms::LinkLabel());
-    this->trayIcon            = (gcnew System::Windows::Forms::NotifyIcon());
+    this->trayIcon            = (gcnew System::Windows::Forms::NotifyIcon(this->components));
     this->contextMenu         = (gcnew System::Windows::Forms::ContextMenu());
     this->trayCloseButton     = (gcnew System::Windows::Forms::MenuItem());
     this->trayInjectButton    = (gcnew System::Windows::Forms::MenuItem());
+    this->trayShowButton      = (gcnew System::Windows::Forms::MenuItem());
     this->menuStrip           = (gcnew System::Windows::Forms::MenuStrip());
     this->preferenceMenu      = (gcnew System::Windows::Forms::ToolStripMenuItem());
     this->trayHideMenuItem    = (gcnew System::Windows::Forms::ToolStripMenuItem());
+    this->autoInjectMenuItem  = (gcnew System::Windows::Forms::ToolStripMenuItem());
     this->injectorStatusBox->SuspendLayout();
     this->clientStatusBox->SuspendLayout();
     this->gameStatusBox->SuspendLayout();
     this->r3nzSkinStatusBox->SuspendLayout();
+    this->menuStrip->SuspendLayout();
     this->SuspendLayout();
     //
     // injectButton
@@ -335,7 +380,7 @@ ref class R3nzUI : public System::Windows::Forms::Form {
     this->linkLabel->LinkColor    = System::Drawing::Color::Silver;
     this->linkLabel->Location     = System::Drawing::Point(20, 284);
     this->linkLabel->Name         = L"linkLabel";
-    this->linkLabel->Size         = System::Drawing::Size(207, 14);
+    this->linkLabel->Size         = System::Drawing::Size(240, 14);
     this->linkLabel->TabIndex     = 11;
     this->linkLabel->TabStop      = true;
     this->linkLabel->Text         = L"(c) 2021-2023 R3nzTheCodeGOD, NiceAesth";
@@ -343,37 +388,67 @@ ref class R3nzUI : public System::Windows::Forms::Form {
     this->linkLabel->LinkClicked +=
       gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &R3nzUI::linkLabel_Click);
     //
-    // contextMenu
-    //
-    this->contextMenu->MenuItems->Add(this->trayCloseButton);
-    this->contextMenu->MenuItems->Add(this->trayInjectButton);
-    //
-    // menuItem
-    //
-    this->trayInjectButton->Index = 0;
-    this->trayInjectButton->Text  = L"Start";
-    this->trayInjectButton->Click += gcnew System::EventHandler(this, &R3nzUI::trayInjectButton_Click);
-    this->trayCloseButton->Index = 1;
-    this->trayCloseButton->Text  = L"Exit";
-    this->trayCloseButton->Click += gcnew System::EventHandler(this, &R3nzUI::trayCloseButton_Click);
-    //
     // trayIcon
     //
-    this->trayIcon->Text        = L"R3nzSkin";
-    this->trayIcon->Icon        = (cli::safe_cast<System::Drawing::Icon ^>(resources->GetObject(L"$this.Icon")));
-    this->trayIcon->Visible     = false;
     this->trayIcon->ContextMenu = this->contextMenu;
+    this->trayIcon->Icon        = (cli::safe_cast<System::Drawing::Icon ^>(resources->GetObject(L"trayIcon.Icon")));
+    this->trayIcon->Text        = L"R3nzSkin";
     this->trayIcon->MouseDoubleClick +=
       gcnew System::Windows::Forms::MouseEventHandler(this, &R3nzUI::trayIcon_MouseDoubleClick);
     //
+    // contextMenu
+    //
+    this->contextMenu->MenuItems->AddRange(gcnew cli::array<System::Windows::Forms::MenuItem ^>(3){
+      this->trayCloseButton, this->trayInjectButton, this->trayShowButton});
+    //
+    // trayShowButton
+    //
+    this->trayShowButton->Index = 0;
+    this->trayShowButton->Text  = L"Show";
+    this->trayShowButton->Click += gcnew System::EventHandler(this, &R3nzUI::trayShowButton_Click);
+    //
+    // trayInjectButton
+    //
+    this->trayInjectButton->Index = 1;
+    this->trayInjectButton->Text  = L"Start";
+    this->trayInjectButton->Click += gcnew System::EventHandler(this, &R3nzUI::trayInjectButton_Click);
+    //
+    // trayCloseButton
+    //
+    this->trayCloseButton->Index = 2;
+    this->trayCloseButton->Text  = L"Exit";
+    this->trayCloseButton->Click += gcnew System::EventHandler(this, &R3nzUI::trayCloseButton_Click);
+    //
     // menuStrip
     //
-    this->preferenceMenu->Text   = L"Preferences";
+    this->menuStrip->Items->AddRange(gcnew cli::array<System::Windows::Forms::ToolStripItem ^>(1){this->preferenceMenu}
+    );
+    this->menuStrip->Location = System::Drawing::Point(0, 0);
+    this->menuStrip->Name     = L"menuStrip";
+    this->menuStrip->Size     = System::Drawing::Size(273, 24);
+    this->menuStrip->TabIndex = 0;
+    //
+    // preferenceMenu
+    //
+    this->preferenceMenu->DropDownItems->AddRange(gcnew cli::array<System::Windows::Forms::ToolStripItem ^>(2){
+      this->trayHideMenuItem, this->autoInjectMenuItem});
+    this->preferenceMenu->Name = L"preferenceMenu";
+    this->preferenceMenu->Size = System::Drawing::Size(80, 20);
+    this->preferenceMenu->Text = L"Preferences";
+    //
+    // trayHideMenuItem
+    //
+    this->trayHideMenuItem->Name = L"trayHideMenuItem";
+    this->trayHideMenuItem->Size = System::Drawing::Size(180, 22);
     this->trayHideMenuItem->Text = L"Hide to tray";
     this->trayHideMenuItem->Click += gcnew System::EventHandler(this, &R3nzUI::trayHideMenuItem_Click);
-    this->preferenceMenu->DropDownItems->Add(this->trayHideMenuItem);
-    this->menuStrip->Items->Add(this->preferenceMenu);
-    this->Controls->Add(this->menuStrip);
+    //
+    // autoInjectMenuItem
+    //
+    this->autoInjectMenuItem->Name = L"autoInjectMenuItem";
+    this->autoInjectMenuItem->Size = System::Drawing::Size(180, 22);
+    this->autoInjectMenuItem->Text = L"Auto Inject";
+    this->autoInjectMenuItem->Click += gcnew System::EventHandler(this, &R3nzUI::autoInjectMenuItem_Click);
     //
     // R3nzUI
     //
@@ -385,6 +460,7 @@ ref class R3nzUI : public System::Windows::Forms::Form {
       static_cast<System::Int32>(static_cast<System::Byte>(30))
     );
     this->ClientSize = System::Drawing::Size(273, 307);
+    this->Controls->Add(this->menuStrip);
     this->Controls->Add(this->linkLabel);
     this->Controls->Add(this->injectorStatusBox);
     this->Controls->Add(this->gameStatusBox);
@@ -412,6 +488,8 @@ ref class R3nzUI : public System::Windows::Forms::Form {
     this->gameStatusBox->PerformLayout();
     this->r3nzSkinStatusBox->ResumeLayout(false);
     this->r3nzSkinStatusBox->PerformLayout();
+    this->menuStrip->ResumeLayout(false);
+    this->menuStrip->PerformLayout();
     this->ResumeLayout(false);
     this->PerformLayout();
   }
@@ -471,6 +549,11 @@ ref class R3nzUI : public System::Windows::Forms::Form {
   }
 
  private:
+  System::Void trayShowButton_Click(System::Object ^ sender, System::EventArgs ^ e) {
+    trayIcon_MouseDoubleClick(nullptr, nullptr);
+  }
+
+ private:
   System::Void trayInjectButton_Click(System::Object ^ sender, System::EventArgs ^ e) {
     this->injectButton_Click(nullptr, nullptr);
   }
@@ -483,6 +566,12 @@ ref class R3nzUI : public System::Windows::Forms::Form {
  private:
   System::Void trayHideMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) {
     this->trayHideMenuItem->Checked = !this->trayHideMenuItem->Checked;
+    this->saveSettings();
+  }
+
+ private:
+  System::Void autoInjectMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e) {
+    this->autoInjectMenuItem->Checked = !this->autoInjectMenuItem->Checked;
     this->saveSettings();
   }
 };

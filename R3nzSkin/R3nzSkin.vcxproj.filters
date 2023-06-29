@@ -4,9 +4,6 @@
     <Filter Include="Imgui">
       <UniqueIdentifier>{6e1c3fe0-7b4e-4ddc-b0af-ef2565509bab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Json">
-      <UniqueIdentifier>{24604dbf-d26d-4752-9537-7815e59a2e32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -139,9 +136,6 @@
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="json\json.hpp">
-      <Filter>Json</Filter>
     </ClInclude>
     <ClInclude Include="Config.hpp">
       <Filter>Source Files\Config</Filter>

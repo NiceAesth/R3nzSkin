@@ -5,7 +5,7 @@
 #include <ShlObj.h>
 #include <Windows.h>
 
-#include "Json/json.hpp"
+#include "../json/json.hpp"
 
 #include "CheatManager.hpp"
 #include "Memory.hpp"

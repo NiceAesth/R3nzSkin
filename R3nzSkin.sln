@@ -23,6 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PythonScripts", "PythonScri
 		PythonScripts\lolskin_to_skin.py = PythonScripts\lolskin_to_skin.py
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "json", "json", "{BB30946A-5D63-46E8-A59F-43AF2277AA3B}"
+	ProjectSection(SolutionItems) = preProject
+		json\json.hpp = json\json.hpp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		China-AVX2|x64 = China-AVX2|x64
