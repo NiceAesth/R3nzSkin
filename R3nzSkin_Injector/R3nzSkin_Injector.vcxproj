@@ -208,8 +208,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\includes\json\json.hpp" />
+    <ClInclude Include="..\includes\lazy_importer\lazy_importer.hpp" />
     <ClInclude Include="Injector.hpp" />
-    <ClInclude Include="lazy_importer.hpp" />
     <ClInclude Include="R3nzUI.hpp">
       <FileType>CppForm</FileType>
     </ClInclude>

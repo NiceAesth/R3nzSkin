@@ -11,6 +11,9 @@
     <Filter Include="Source Files\JSON">
       <UniqueIdentifier>{76ca2915-a4ca-4887-83ed-307dfad72a6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\lazy_importer">
+      <UniqueIdentifier>{5a735d78-8780-4978-852a-4f77f68dad8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,11 +38,11 @@
     <ClInclude Include="Injector.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="lazy_importer.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\includes\json\json.hpp">
       <Filter>Source Files\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\lazy_importer\lazy_importer.hpp">
+      <Filter>Source Files\lazy_importer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

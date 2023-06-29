@@ -5,9 +5,9 @@
 #include <regex>
 #include <thread>
 
+#include "../includes/lazy_importer/lazy_importer.hpp"
 #include "Injector.hpp"
 #include "R3nzUI.hpp"
-#include "lazy_importer.hpp"
 
 using namespace System;
 using namespace System::Windows::Forms;

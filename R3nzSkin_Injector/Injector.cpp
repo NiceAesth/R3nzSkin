@@ -8,9 +8,9 @@
 #include <string>
 #include <thread>
 
+#include "../includes/lazy_importer/lazy_importer.hpp"
 #include "Injector.hpp"
 #include "R3nzUI.hpp"
-#include "lazy_importer.hpp"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -171,7 +171,7 @@ std::string Injector::randomString(std::uint32_t size) noexcept {
   return tmp_s;
 }
 
-void Injector::ensureDLL() {
+void Injector::ensureDLL() noexcept {
   bool fileExists = System::IO::File::Exists(L"R3nzSkin.dll");
   if (!fileExists) {
     auto result = MessageBox::Show(
@@ -185,7 +185,7 @@ void Injector::ensureDLL() {
   }
 }
 
-void Injector::autoUpdate() {
+void Injector::autoUpdate() noexcept {
   WebClient ^ client = gcnew WebClient();
   client->Headers->Add(
     L"User-Agent", L"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0"
