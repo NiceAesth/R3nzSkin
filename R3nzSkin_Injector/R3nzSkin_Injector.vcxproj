@@ -207,6 +207,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\includes\json\json.hpp" />
     <ClInclude Include="Injector.hpp" />
     <ClInclude Include="lazy_importer.hpp" />
     <ClInclude Include="R3nzUI.hpp">
