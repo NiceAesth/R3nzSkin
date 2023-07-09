@@ -8,10 +8,13 @@
 #include <string>
 #include <thread>
 
+#include "../includes/json/json.hpp"
 #include "../includes/lazy_importer/lazy_importer.hpp"
 #include "Injector.hpp"
 #include "R3nzUI.hpp"
 #include "Utils.hpp"
+
+using json = nlohmann::json;
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -181,64 +184,98 @@ void Injector::autoUpdate() noexcept {
   );
 
   try {
-    std::string json = msclr::interop::marshal_as<std::string>(
+    std::string jsonStr = msclr::interop::marshal_as<std::string>(
       client->DownloadString(L"https://api.github.com/repos/NiceAesth/R3nzSkin/releases/latest")
     );
-    std::regex tagnameRegex("\"tag_name\"\\s*:\\s*\"([^\"]+)");
-    std::regex urlRegex("\"browser_download_url\"\\s*:\\s*\"([^\"]+)");
-    std::regex dateRegex("\"created_at\"\\s*:\\s*\"([^\"]+)");
 
-    std::smatch tagnameMatch, urlMatch, dateMatch;
-    if (std::regex_search(json, tagnameMatch, tagnameRegex)) {
-      auto version = gcnew String(tagnameMatch[1].str().c_str());
-      if (std::regex_search(json, dateMatch, dateRegex)) {
-        DateTime date_of_github_release = DateTime::ParseExact(
-          gcnew String(dateMatch[1].str().c_str()), L"yyyy-MM-ddTHH:mm:ss'Z'", CultureInfo::InvariantCulture
-        );
-        DateTime date_of_current_release = System::IO::File::GetLastWriteTime(L"R3nzSkin.dll");
-        if (date_of_current_release == date_of_github_release) {
-          return;
-        }
+    json jsonData         = json::parse(jsonStr);
+    std::string tagname   = jsonData["tag_name"];
+    std::string createdAt = jsonData["created_at"];
+    std::regex tagnameRegex("v([\\d.]+)");
+    std::smatch versionMatch;
+    std::string version;
 
-        if (date_of_current_release > date_of_github_release) {
-          return;
-        }
+    if (std::regex_search(tagname, versionMatch, tagnameRegex)) {
+      version = versionMatch[1];
+    }
 
-        auto result = MessageBox::Show(
-          L"New version is available on GitHub\nWould you like to download it now?", L"R3nzSkin",
-          MessageBoxButtons::YesNo, MessageBoxIcon::Information
-        );
-        if (result == DialogResult::No) {
-          return;
-        }
+    System::String ^ newVersion = gcnew System::String(version.c_str());
 
-        if (std::regex_search(json, urlMatch, urlRegex)) {
-          auto url  = gcnew String(urlMatch[1].str().c_str());
-          auto file = String::Format(L"R3nzSkin_{0}.zip", version);
-          client->DownloadFile(url, file);
+    DateTime date_of_github_release =
+      DateTime::ParseExact(gcnew String(createdAt.c_str()), L"yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo::InvariantCulture);
+    DateTime date_of_current_release = System::IO::File::GetLastWriteTime(L"R3nzSkin.dll");
 
-          System::IO::Compression::ZipFile::ExtractToDirectory(file, L"R3nzSkin");
-          System::IO::File::Delete(file);
-          System::IO::File::Delete(L"R3nzSkin.dll");
-          System::IO::File::Move(
-            L"R3nzSkin\\R3nzSkin_Injector.exe", String::Format(L"R3nzSkin_Injector_{0}.exe", version)
-          );
-          System::IO::File::Move(L"R3nzSkin\\R3nzSkin.dll", L"R3nzSkin.dll");
-          System::IO::Directory::Delete(L"R3nzSkin");
+    if (date_of_current_release >= date_of_github_release) {
+      return;
+    }
 
-          auto process_info       = gcnew System::Diagnostics::ProcessStartInfo();
-          process_info->Arguments = L"/C choice /C Y /N /D Y /T 1 & del \"" +
-                                    System::Diagnostics::Process::GetCurrentProcess()->MainModule->FileName + L"\"";
-          process_info->CreateNoWindow = true;
-          process_info->FileName       = L"cmd.exe";
-          process_info->WindowStyle    = System::Diagnostics::ProcessWindowStyle::Hidden;
-          System::Diagnostics::Process::Start(process_info);
-          System::Diagnostics::Process::Start(String::Format(L"R3nzSkin_Injector_{0}.exe", version));
+    std::string buildProfile;
+#ifdef _RIOT
+#ifdef __AVX2__
+    buildProfile = "R3nzSkin-Riot-AVX2";
+#else
+    buildProfile = "R3nzSkin-Riot-SSE2";
+#endif
+#else
+#ifdef __AVX2__
+    buildProfile = "R3nzSkin-China-AVX2";
+#else
+    buildProfile = "R3nzSkin-China-SSE2";
+#endif
+#endif
 
-          Environment::Exit(0);
-        }
+    auto result = MessageBox::Show(
+      L"New version is available on GitHub\nWould you like to download it now?", gcnew String(buildProfile.c_str()),
+      MessageBoxButtons::YesNo, MessageBoxIcon::Information
+    );
+
+    if (result == DialogResult::No) {
+      return;
+    }
+
+    std::string downloadUrl;
+    std::string file;
+
+    for (const auto &asset : jsonData["assets"]) {
+      std::string name = asset["name"];
+      if (name.find(buildProfile) != std::string::npos) {
+        downloadUrl = asset["browser_download_url"];
+        file        = buildProfile + ".zip";
+        break;
       }
     }
+
+    if (downloadUrl.empty()) {
+      MessageBox::Show(
+        L"Download URL not found for the specified build profile.", L"R3nzSkin", MessageBoxButtons::OK,
+        MessageBoxIcon::Error
+      );
+      return;
+    }
+
+    auto url     = gcnew String(downloadUrl.c_str());
+    auto fileStr = gcnew String(file.c_str());
+    client->DownloadFile(url, fileStr);
+
+    System::IO::Compression::ZipFile::ExtractToDirectory(fileStr, L"R3nzSkin");
+    System::IO::File::Delete(fileStr);
+    System::IO::File::Delete(L"R3nzSkin.dll");
+    System::IO::File::Move(
+      L"R3nzSkin\\R3nzSkin_Injector.exe", String::Format(L"R3nzSkin_Injector_{0}.exe", newVersion)
+    );
+    System::IO::File::Move(L"R3nzSkin\\R3nzSkin.dll", L"R3nzSkin.dll");
+    System::IO::Directory::Delete(L"R3nzSkin");
+
+    auto process_info       = gcnew System::Diagnostics::ProcessStartInfo();
+    process_info->Arguments = L"/C choice /C Y /N /D Y /T 1 & del \"" +
+                              System::Diagnostics::Process::GetCurrentProcess()->MainModule->FileName + L"\"";
+    process_info->CreateNoWindow = true;
+    process_info->FileName       = L"cmd.exe";
+    process_info->WindowStyle    = System::Diagnostics::ProcessWindowStyle::Hidden;
+    System::Diagnostics::Process::Start(process_info);
+    System::Diagnostics::Process::Start(String::Format(L"R3nzSkin_Injector_{0}.exe", newVersion));
+
+    Environment::Exit(0);
   } catch (Exception ^ e) {
     MessageBox::Show(e->Message, L"R3nzSkin", MessageBoxButtons::OK, MessageBoxIcon::Error);
   }
