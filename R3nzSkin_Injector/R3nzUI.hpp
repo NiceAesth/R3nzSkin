@@ -1,5 +1,6 @@
 #pragma once
 #include "../includes/json/json.hpp"
+#include "Utils.hpp"
 
 namespace R3nzSkinInjector {
 
@@ -404,7 +405,7 @@ ref class R3nzUI : public System::Windows::Forms::Form {
     this->MaximizeBox     = false;
     this->Name            = L"R3nzUI";
     this->RightToLeft     = System::Windows::Forms::RightToLeft::No;
-    this->Text            = L"R3nzSkin";
+    this->Text            = msclr::interop::marshal_as<String ^>(Utils::randomString(std::rand() % (10 - 7 + 1) + 7));
     this->Load += gcnew System::EventHandler(this, &R3nzUI::R3nzUI_Load);
     this->Resize += gcnew System::EventHandler(this, &R3nzUI::R3nzUI_Resize);
     this->injectorStatusBox->ResumeLayout(false);

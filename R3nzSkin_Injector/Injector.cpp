@@ -11,6 +11,7 @@
 #include "../includes/lazy_importer/lazy_importer.hpp"
 #include "Injector.hpp"
 #include "R3nzUI.hpp"
+#include "Utils.hpp"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -159,18 +160,6 @@ void WINAPI Injector::enableDebugPrivilege() noexcept {
   }
 }
 
-std::string Injector::randomString(std::uint32_t size) noexcept {
-  static auto &alphanum = "_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  std::string tmp_s;
-  tmp_s.reserve(size);
-
-  while (size--) {
-    tmp_s += alphanum[std::rand() % (sizeof(alphanum) - 1)];
-  }
-
-  return tmp_s;
-}
-
 void Injector::ensureDLL() noexcept {
   bool fileExists = System::IO::File::Exists(L"R3nzSkin.dll");
   if (!fileExists) {
@@ -261,7 +250,7 @@ void Injector::renameExe() noexcept {
 
   const auto path{std::string(szExeFileName)};
   const auto exe{path.substr(path.find_last_of("\\") + 1, path.size())};
-  const auto newName{randomString(std::rand() % (10 - 7 + 1) + 7) + ".exe"};
+  const auto newName{Utils::randomString(std::rand() % (10 - 7 + 1) + 7) + ".exe"};
 
   std::rename(exe.c_str(), newName.c_str());
 }
