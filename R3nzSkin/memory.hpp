@@ -69,10 +69,10 @@ class Memory {
      0,
      &offsets::global::ManagerTemplate_AIMinionClient_},
     {{"48 89 0D ? ? ? ? 33 C9 C7 44 24 ? ? ? ? ?"}, true, false, true, 0, &offsets::global::ManagerTemplate_AITurret_},
-    {{"48 8B 0D ? ? ? ? FF 15 ? ? ? ? E8 ? ? ? ? 48 8B"}, true, false, true, 0, &offsets::global::Riot__g_window},
+    {{"48 8B 0D ? ? ? ? FF 15 ? ? ? ? E8 ? ? ? ? 84 C0"}, true, false, true, 0, &offsets::global::Riot__g_window},
     {{"48 8D 8B ? ? ? ? 48 89 44 24 ? C7 44 24"}, false, true, false, 0, &offsets::AIBaseCommon::CharacterDataStack},
-    {{"40 38 BB ? ? 00 00 0F 85 ? 00 00 00 66 C7 83 ? ? 00 00 00 04 0F 31 48 C1 E2 ? 4C 8D 83 ? ? 00 00 48 0B C2 44 8B "
-      "CF 48 89 44 ? ? 8B D7 41 BA ? 00 00 00 66 0F 1F 84"},
+    {{"40 38 BB ? ? ? ? 0F 85 ? ? ? ? 66 C7 83 ? ? ? ? ? ? 0F 31 48 C1 E2 20 4C 8D 83 ? ? ? ? 48 0B C2 44 8B CF 48 89 "
+      "44 24 ? 8B D7"},
      false,
      true,
      false,
