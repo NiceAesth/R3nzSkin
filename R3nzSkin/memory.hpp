@@ -51,7 +51,7 @@ class Memory {
   void update(bool gameClient = true) noexcept;
 
   std::vector<offset_signature> gameClientSig{
-    {{"48 8B 05 ? ? ? ? 8B 58 0C"}, true, false, true, 0, &offsets::global::GameClient}};
+    {{"48 8B 05 ? ? ? ? 4C 8B FA 83 78 0C 02"}, true, false, true, 0, &offsets::global::GameClient}};
 
   std::vector<offset_signature> sigs{
     {{"48 8B 3D ? ? ? ? 48 3B CF"}, true, false, true, 0, &offsets::global::Player},
