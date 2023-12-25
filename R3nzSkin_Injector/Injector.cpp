@@ -22,7 +22,7 @@ using namespace System::Threading;
 using namespace System::Globalization;
 using namespace System::Net;
 
-proclist_t WINAPI Injector::findProcesses(const std::wstring name) noexcept {
+proclist_t WINAPI Injector::findProcesses(const std::wstring &name) noexcept {
   auto process_snap{LI_FN(CreateToolhelp32Snapshot)(TH32CS_SNAPPROCESS, 0)};
   proclist_t list;
 
@@ -52,7 +52,7 @@ proclist_t WINAPI Injector::findProcesses(const std::wstring name) noexcept {
 bool WINAPI Injector::isInjected(const std::uint32_t pid) noexcept {
   auto hProcess{LI_FN(OpenProcess)(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid)};
 
-  if (NULL == hProcess) {
+  if (nullptr == hProcess) {
     return false;
   }
 
@@ -102,7 +102,7 @@ bool WINAPI Injector::inject(const std::uint32_t pid) noexcept {
 
   const auto dll_path{std::wstring(current_dir) + L"\\R3nzSkin.dll"};
 
-  if (auto f{std::ifstream(dll_path)}; !f.is_open()) {
+  if (const auto f{std::ifstream(dll_path)}; !f.is_open()) {
     LI_FN(MessageBoxW)
     (nullptr, L"R3nzSkin.dll file could not be found.\nTry reinstalling the cheat.", L"R3nzSkin", MB_ICONERROR | MB_OK);
     LI_FN(CloseHandle)(handle);
@@ -128,7 +128,7 @@ bool WINAPI Injector::inject(const std::uint32_t pid) noexcept {
   HANDLE thread{};
   LI_FN(NtCreateThreadEx)
     .nt_cached(
-    )(&thread, GENERIC_ALL, NULL, handle,
+    )(&thread, GENERIC_ALL, nullptr, handle,
       reinterpret_cast<LPTHREAD_START_ROUTINE>(
         LI_FN(GetProcAddress).get()(LI_FN(GetModuleHandleW).get()(L"kernel32.dll"), "LoadLibraryW")
       ),
@@ -151,12 +151,12 @@ void WINAPI Injector::enableDebugPrivilege() noexcept {
   HANDLE token{};
   if (OpenProcessToken(LI_FN(GetCurrentProcess).get()(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token)) {
     LUID value;
-    if (LookupPrivilegeValueW(NULL, SE_DEBUG_NAME, &value)) {
+    if (LookupPrivilegeValueW(nullptr, SE_DEBUG_NAME, &value)) {
       TOKEN_PRIVILEGES tp{};
       tp.PrivilegeCount           = 1;
       tp.Privileges[0].Luid       = value;
       tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-      if (AdjustTokenPrivileges(token, FALSE, &tp, sizeof(tp), NULL, NULL)) {
+      if (AdjustTokenPrivileges(token, FALSE, &tp, sizeof(tp), nullptr, nullptr)) {
         LI_FN(CloseHandle)(token);
       }
     }
@@ -184,6 +184,13 @@ void Injector::autoUpdate() noexcept {
   );
 
   try {
+    System::String ^ display_message = L"New version is available on GitHub\nWould you like to download it now?";
+
+    bool dll_missing = !System::IO::File::Exists(L"R3nzSkin.dll");
+    if (dll_missing) {
+      display_message = L"You are missing important files.\nWould you like to attempt to re-download them?";
+    }
+
     std::string jsonStr = msclr::interop::marshal_as<std::string>(
       client->DownloadString(L"https://api.github.com/repos/NiceAesth/R3nzSkin/releases/latest")
     );
@@ -225,11 +232,13 @@ void Injector::autoUpdate() noexcept {
 #endif
 
     auto result = MessageBox::Show(
-      L"New version is available on GitHub\nWould you like to download it now?", gcnew String(buildProfile.c_str()),
-      MessageBoxButtons::YesNo, MessageBoxIcon::Information
+      display_message, gcnew String(buildProfile.c_str()), MessageBoxButtons::YesNo, MessageBoxIcon::Information
     );
 
     if (result == DialogResult::No) {
+      if (dll_missing) {
+        exit(-1);
+      }
       return;
     }
 
@@ -259,7 +268,9 @@ void Injector::autoUpdate() noexcept {
 
     System::IO::Compression::ZipFile::ExtractToDirectory(fileStr, L"R3nzSkin");
     System::IO::File::Delete(fileStr);
-    System::IO::File::Delete(L"R3nzSkin.dll");
+    if (!dll_missing) {
+      System::IO::File::Delete(L"R3nzSkin.dll");
+    }
     System::IO::File::Move(
       L"R3nzSkin\\R3nzSkin_Injector.exe", String::Format(L"R3nzSkin_Injector_{0}.exe", newVersion)
     );
