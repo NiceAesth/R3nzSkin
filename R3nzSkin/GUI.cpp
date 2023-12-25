@@ -107,12 +107,10 @@ void GUI::render() noexcept {
                 "Current Skin", &cheatManager.config->current_combo_skin_index, vector_getter_skin,
                 static_cast<void *>(&values), values.size() + 1
               )) {
-            if (cheatManager.config->current_combo_skin_index > 0) {
-              player->change_skin(
-                values[cheatManager.config->current_combo_skin_index - 1].model_name,
-                values[cheatManager.config->current_combo_skin_index - 1].skin_id
-              );
-            }
+            player->change_skin(
+              values[(std::max)(0, cheatManager.config->current_combo_skin_index - 1)].model_name,
+              values[(std::max)(0, cheatManager.config->current_combo_skin_index - 1)].skin_id
+            );
           }
 
           const auto playerHash{fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)};
@@ -200,9 +198,9 @@ void GUI::render() noexcept {
             if (ImGui::Combo(
                   str_buffer, &first->second, vector_getter_skin, static_cast<void *>(&values), values.size() + 1
                 )) {
-              if (first->second > 0) {
-                hero->change_skin(values[first->second - 1].model_name, values[first->second - 1].skin_id);
-              }
+              hero->change_skin(
+                values[(std::max)(0, first->second - 1)].model_name, values[(std::max)(0, first->second - 1)].skin_id
+              );
             }
           }
           footer();
