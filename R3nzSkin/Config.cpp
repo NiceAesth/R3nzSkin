@@ -45,16 +45,16 @@ void Config::save() noexcept {
   config_json["current_ward_skin_index"]   = this->current_ward_skin_index;
   config_json["current_minion_skin_index"] = this->current_minion_skin_index;
 
-  for (const auto &it : this->current_combo_ally_skin_index) {
-    config_json["current_combo_ally_skin_index"][std::to_string(it.first)] = it.second;
+  for (const auto &[first, second] : this->current_combo_ally_skin_index) {
+    config_json["current_combo_ally_skin_index"][std::to_string(first)] = second;
   }
 
-  for (const auto &it : this->current_combo_enemy_skin_index) {
-    config_json["current_combo_enemy_skin_index"][std::to_string(it.first)] = it.second;
+  for (const auto &[first, second] : this->current_combo_enemy_skin_index) {
+    config_json["current_combo_enemy_skin_index"][std::to_string(first)] = second;
   }
 
-  for (const auto &it : this->current_combo_jungle_mob_skin_index) {
-    config_json["current_combo_jungle_mob_skin_index"][std::to_string(it.first)] = it.second;
+  for (const auto &[first, second] : this->current_combo_jungle_mob_skin_index) {
+    config_json["current_combo_jungle_mob_skin_index"][std::to_string(first)] = second;
   }
 
   out << config_json.dump();
@@ -105,9 +105,9 @@ void Config::load() noexcept {
     }
   }
 
-  const auto jungle_mobs_skins{config_json.find("current_combo_jungle_mob_skin_index")};
-  if (jungle_mobs_skins != config_json.end()) {
-    for (const auto &it : jungle_mobs_skins.value().items()) {
+  const auto jungle_mob_skins{config_json.find("current_combo_jungle_mob_skin_index")};
+  if (jungle_mob_skins != config_json.end()) {
+    for (const auto &it : jungle_mob_skins.value().items()) {
       this->current_combo_jungle_mob_skin_index[std::stoull(it.key())] = it.value().get<std::int32_t>();
     }
   }
