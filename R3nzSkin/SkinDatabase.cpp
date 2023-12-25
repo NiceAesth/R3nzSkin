@@ -39,21 +39,21 @@ void SkinDatabase::load() noexcept {
       }
 
       const auto champ_name{fnv::hash_runtime(champion->champion_name.str)};
-      this->champions_skins[champ_name].push_back({champion->champion_name.str, skin_display_name_translated, i});
+      this->champion_skins[champ_name].push_back({champion->champion_name.str, skin_display_name_translated, i});
 
       if (i == 7 && champ_name == FNV("Lux")) {
-        this->champions_skins[champ_name].push_back({"LuxAir", "Elementalist Air Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxDark", "Elementalist Dark Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxFire", "Elementalist Fire Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxIce", "Elementalist Ice Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxMagma", "Elementalist Magma Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxMystic", "Elementalist Mystic Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxNature", "Elementalist Nature Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxStorm", "Elementalist Storm Lux", i});
-        this->champions_skins[champ_name].push_back({"LuxWater", "Elementalist Water Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxAir", "Elementalist Air Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxDark", "Elementalist Dark Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxFire", "Elementalist Fire Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxIce", "Elementalist Ice Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxMagma", "Elementalist Magma Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxMystic", "Elementalist Mystic Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxNature", "Elementalist Nature Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxStorm", "Elementalist Storm Lux", i});
+        this->champion_skins[champ_name].push_back({"LuxWater", "Elementalist Water Lux", i});
       } else if (i == 6 && champ_name == FNV("Sona")) {
-        this->champions_skins[champ_name].push_back({"SonaDJGenre02", "DJ Sona 2", i});
-        this->champions_skins[champ_name].push_back({"SonaDJGenre03", "DJ Sona 3", i});
+        this->champion_skins[champ_name].push_back({"SonaDJGenre02", "DJ Sona 2", i});
+        this->champion_skins[champ_name].push_back({"SonaDJGenre03", "DJ Sona 3", i});
       }
     }
   }
@@ -66,10 +66,10 @@ void SkinDatabase::load() noexcept {
       break;
     }
 
-    this->wards_skins.emplace_back(ward_skin_id, ward_display_name_translated);
+    this->ward_skins.emplace_back(ward_skin_id, ward_display_name_translated);
   }
 
-  std::ranges::sort(this->wards_skins, [](const auto &a, const auto &b) {
+  std::ranges::sort(this->ward_skins, [](const auto &a, const auto &b) {
     return std::strong_ordering::less == std::strcmp(a.second, b.second) <=> 0;
   });
 }

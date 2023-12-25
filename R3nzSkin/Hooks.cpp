@@ -63,13 +63,13 @@ static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wP
       if (const auto player{cheatManager.memory->localPlayer}; (::GetAsyncKeyState(VK_LCONTROL) & 0x8000) && player) {
         const auto playerHash{fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)};
         if (const auto it{std::ranges::find_if(
-              cheatManager.database->specialSkins,
+              cheatManager.database->special_skins,
               [&skin = player->get_character_data_stack()->base_skin.skin,
                &ph   = playerHash](const SkinDatabase::specialSkin &x) noexcept -> bool {
                 return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
               }
             )};
-            it != cheatManager.database->specialSkins.end()) {
+            it != cheatManager.database->special_skins.end()) {
           const auto stack{player->get_character_data_stack()};
           if (stack->base_skin.gear < static_cast<std::int8_t>(it->gears.size()) - 1) {
             ++stack->base_skin.gear;
@@ -84,7 +84,7 @@ static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wP
       if (const auto player{cheatManager.memory->localPlayer}; player) {
         const auto &values{
           cheatManager.database
-            ->champions_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
+            ->champion_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
         if (++cheatManager.config->current_combo_skin_index > static_cast<std::int32_t>(values.size())) {
           cheatManager.config->current_combo_skin_index = static_cast<std::int32_t>(values.size());
         }
@@ -100,7 +100,7 @@ static LRESULT WINAPI wndProc(const HWND window, const UINT msg, const WPARAM wP
       if (const auto player{cheatManager.memory->localPlayer}; player) {
         const auto &values{
           cheatManager.database
-            ->champions_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
+            ->champion_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
         if (--cheatManager.config->current_combo_skin_index > 0) {
           player->change_skin(
             values[cheatManager.config->current_combo_skin_index - 1].model_name,
@@ -402,7 +402,7 @@ void Hooks::init() noexcept {
       if (cheatManager.config->current_combo_skin_index > 0) {
         const auto &values{
           cheatManager.database
-            ->champions_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
+            ->champion_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
         player->change_skin(
           values[cheatManager.config->current_combo_skin_index - 1].model_name,
           values[cheatManager.config->current_combo_skin_index - 1].skin_id
@@ -432,7 +432,7 @@ void Hooks::init() noexcept {
       }
 
       if (config_entry->second > 0) {
-        const auto &values = cheatManager.database->champions_skins[champion_name_hash];
+        const auto &values = cheatManager.database->champion_skins[champion_name_hash];
         hero->change_skin(values[config_entry->second - 1].model_name, values[config_entry->second - 1].skin_id);
       }
     }

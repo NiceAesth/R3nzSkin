@@ -100,7 +100,7 @@ void GUI::render() noexcept {
       if (player) {
         if (ImGui::BeginTabItem("Local Player")) {
           auto &values{cheatManager.database
-                         ->champions_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
+                         ->champion_skins[fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)]};
           ImGui::Text("Player Skin Settings:");
 
           if (ImGui::Combo(
@@ -117,13 +117,13 @@ void GUI::render() noexcept {
 
           const auto playerHash{fnv::hash_runtime(player->get_character_data_stack()->base_skin.model.str)};
           if (const auto it{std::ranges::find_if(
-                cheatManager.database->specialSkins,
+                cheatManager.database->special_skins,
                 [&skin = player->get_character_data_stack()->base_skin.skin,
                  &ph   = playerHash](const SkinDatabase::specialSkin &x) noexcept -> bool {
                   return x.champHash == ph && (x.skinIdStart <= skin && x.skinIdEnd >= skin);
                 }
               )};
-              it != cheatManager.database->specialSkins.end()) {
+              it != cheatManager.database->special_skins.end()) {
             const auto stack{player->get_character_data_stack()};
             gear = stack->base_skin.gear;
 
@@ -138,12 +138,12 @@ void GUI::render() noexcept {
 
           if (ImGui::Combo(
                 "Current Ward Skin", &cheatManager.config->current_combo_ward_index, vector_getter_ward_skin,
-                static_cast<void *>(&cheatManager.database->wards_skins), cheatManager.database->wards_skins.size() + 1
+                static_cast<void *>(&cheatManager.database->ward_skins), cheatManager.database->ward_skins.size() + 1
               )) {
             cheatManager.config->current_ward_skin_index =
               cheatManager.config->current_combo_ward_index == 0
                 ? -1
-                : cheatManager.database->wards_skins.at(cheatManager.config->current_combo_ward_index - 1).first;
+                : cheatManager.database->ward_skins.at(cheatManager.config->current_combo_ward_index - 1).first;
           }
           footer();
           ImGui::EndTabItem();
@@ -196,7 +196,7 @@ void GUI::render() noexcept {
               reinterpret_cast<std::uintptr_t>(hero)
             );
 
-            auto &values{cheatManager.database->champions_skins[champion_name_hash]};
+            auto &values{cheatManager.database->champion_skins[champion_name_hash]};
             if (ImGui::Combo(
                   str_buffer, &first->second, vector_getter_skin, static_cast<void *>(&values), values.size() + 1
                 )) {
@@ -214,8 +214,7 @@ void GUI::render() noexcept {
         ImGui::Text("Global Skin Settings:");
         if (ImGui::Combo(
               "Minion Skin:", &cheatManager.config->current_combo_minion_index, vector_getter_default,
-              static_cast<void *>(&cheatManager.database->minions_skins),
-              cheatManager.database->minions_skins.size() + 1
+              static_cast<void *>(&cheatManager.database->minion_skins), cheatManager.database->minion_skins.size() + 1
             )) {
           cheatManager.config->current_minion_skin_index = cheatManager.config->current_combo_minion_index - 1;
         }
@@ -234,7 +233,7 @@ void GUI::render() noexcept {
         }
         ImGui::Separator();
         ImGui::Text("Jungle Mob Skin Settings:");
-        for (auto &[name, name_hashes, skins] : cheatManager.database->jungle_mobs_skins) {
+        for (auto &[name, name_hashes, skins] : cheatManager.database->jungle_mob_skins) {
           std::snprintf(str_buffer, 256, "%s Skin:", name);
           const auto [first, second]{
             cheatManager.config->current_combo_jungle_mob_skin_index.insert({name_hashes.front(), 0})};
@@ -305,8 +304,8 @@ void GUI::render() noexcept {
               continue;
             }
 
-            const auto skinCount{cheatManager.database->champions_skins[championHash].size()};
-            auto &skinDatabase{cheatManager.database->champions_skins[championHash]};
+            const auto skinCount{cheatManager.database->champion_skins[championHash].size()};
+            auto &skinDatabase{cheatManager.database->champion_skins[championHash]};
             auto &config{
               (hero->get_team() != my_team) ? cheatManager.config->current_combo_enemy_skin_index
                                             : cheatManager.config->current_combo_ally_skin_index};

@@ -34,10 +34,10 @@ class SkinDatabase {
 
   void load() noexcept;
 
-  std::map<std::uint64_t, std::vector<skin_info>> champions_skins;
-  std::vector<std::pair<std::uint32_t, const char *>> wards_skins;
+  std::map<std::uint64_t, std::vector<skin_info>> champion_skins;
+  std::vector<std::pair<std::uint32_t, const char *>> ward_skins;
 
-  std::vector<const char *> minions_skins{
+  std::vector<const char *> minion_skins{
     "Minion",        "Summer Minion",     "Project Minion", "Snowdown Minion", "Draven Minion", "Star Guardian Minion",
     "Arcade Minion", "Snowdown 2 Minion", "Odyssey Minion", "Mouse Minion",    "Arcane Minion"};
 
@@ -59,7 +59,7 @@ class SkinDatabase {
     "Howling Abyss Order Turret",
     "Howling Abyss Chaos Turret"};
 
-  std::vector<jungle_mob_skin_info> jungle_mobs_skins{
+  std::vector<jungle_mob_skin_info> jungle_mob_skins{
     {"Baron",
      {FNV("SRU_Baron")},
      {"Baron", "Snowdown Baron", "Championship Baron", "Lunar Revel Baron", "MSI Baron", "Odyssey Baron",
@@ -72,7 +72,7 @@ class SkinDatabase {
     {"Krug", {FNV("SRU_Krug"), FNV("SRU_KrugMini"), FNV("SRU_KrugMiniMini")}, {"Krug", "Dark Krug"}},
     {"Razorbeak", {FNV("SRU_Razorbeak"), FNV("SRU_RazorbeakMini")}, {"Razorbeak", "Chicken Razorbeak"}}};
 
-  std::vector<specialSkin> specialSkins{
+  std::vector<specialSkin> special_skins{
     {FNV("Katarina"), 29, 36, {"Dagger 1", "Dagger 2", "Dagger 3", "Dagger 4", "Dagger 5", "Dagger 6"}},
     {FNV("Renekton"), 26, 32, {"Head off", "Head on", "Fins", "Ultimate"}},
     {FNV("MissFortune"), 16, 16, {"Scarlet fair", "Zero hour", "Royal arms", "Starswarm"}},
