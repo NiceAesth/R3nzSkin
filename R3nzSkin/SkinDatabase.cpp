@@ -13,7 +13,7 @@ void SkinDatabase::load() noexcept {
   for (const auto &champion : cheatManager.memory->championManager->champions) {
     std::vector<std::int32_t> skins_ids;
 
-    for (auto i{0u}; i < champion->skins.size; ++i) {
+    for (auto i{0}; i < champion->skins.size; ++i) {
       skins_ids.push_back(champion->skins.list[i].skin_id);
     }
 
@@ -66,6 +66,10 @@ void SkinDatabase::load() noexcept {
       break;
     }
 
-    this->wards_skins.push_back({ward_skin_id, ward_display_name_translated});
+    this->wards_skins.emplace_back(ward_skin_id, ward_display_name_translated);
   }
+
+  std::ranges::sort(this->wards_skins, [](const auto &a, const auto &b) {
+    return std::strong_ordering::less == std::strcmp(a.second, b.second) <=> 0;
+  });
 }
