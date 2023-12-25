@@ -163,20 +163,6 @@ void WINAPI Injector::enableDebugPrivilege() noexcept {
   }
 }
 
-void Injector::ensureDLL() noexcept {
-  bool fileExists = System::IO::File::Exists(L"R3nzSkin.dll");
-  if (!fileExists) {
-    auto result = MessageBox::Show(
-      L"Your version of R3nzSkin is missing important files. Please redownload if you wish to continue.", L"R3nzSkin",
-      MessageBoxButtons::OKCancel, MessageBoxIcon::Error
-    );
-    if (result == DialogResult::OK) {
-      System::Diagnostics::Process::Start(L"https://github.com/NiceAesth/R3nzSkin/releases");
-    }
-    System::Environment::Exit(0);
-  }
-}
-
 void Injector::autoUpdate() noexcept {
   WebClient ^ client = gcnew WebClient();
   client->Headers->Add(
@@ -237,7 +223,7 @@ void Injector::autoUpdate() noexcept {
 
     if (result == DialogResult::No) {
       if (dll_missing) {
-        exit(-1);
+        System::Environment::Exit(0);
       }
       return;
     }
