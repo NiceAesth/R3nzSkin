@@ -45,16 +45,16 @@ void Config::save() noexcept {
   config_json["current_ward_skin_index"]   = this->current_ward_skin_index;
   config_json["current_minion_skin_index"] = this->current_minion_skin_index;
 
-  for (const auto &it : this->current_combo_ally_skin_index) {
-    config_json["current_combo_ally_skin_index"][std::to_string(it.first)] = it.second;
+  for (const auto &[first, second] : this->current_combo_ally_skin_index) {
+    config_json["current_combo_ally_skin_index"][std::to_string(first)] = second;
   }
 
-  for (const auto &it : this->current_combo_enemy_skin_index) {
-    config_json["current_combo_enemy_skin_index"][std::to_string(it.first)] = it.second;
+  for (const auto &[first, second] : this->current_combo_enemy_skin_index) {
+    config_json["current_combo_enemy_skin_index"][std::to_string(first)] = second;
   }
 
-  for (const auto &it : this->current_combo_jungle_mob_skin_index) {
-    config_json["current_combo_jungle_mob_skin_index"][std::to_string(it.first)] = it.second;
+  for (const auto &[first, second] : this->current_combo_jungle_mob_skin_index) {
+    config_json["current_combo_jungle_mob_skin_index"][std::to_string(first)] = second;
   }
 
   out << config_json.dump();
