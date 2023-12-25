@@ -105,9 +105,9 @@ void Config::load() noexcept {
     }
   }
 
-  const auto jungle_mobs_skins{config_json.find("current_combo_jungle_mob_skin_index")};
-  if (jungle_mobs_skins != config_json.end()) {
-    for (const auto &it : jungle_mobs_skins.value().items()) {
+  const auto jungle_mob_skins{config_json.find("current_combo_jungle_mob_skin_index")};
+  if (jungle_mob_skins != config_json.end()) {
+    for (const auto &it : jungle_mob_skins.value().items()) {
       this->current_combo_jungle_mob_skin_index[std::stoull(it.key())] = it.value().get<std::int32_t>();
     }
   }
